@@ -77,14 +77,39 @@ convex-hull
 
    Replace `/path/to/javafx-sdk/lib` with the actual path to your JavaFX SDK.
 
+## Screenshots
+
+Save your screenshot images (e.g. `screenshots/visualization.png`) in the repo and reference them directly:
+```markdown
+![Initial UI](screenshots/initial_ui.png)
+![Loaded Points](screenshots/Load_Points.png)
+![Compute Hull](screenshots/run_algorithm.png)
+```
+
 ## Usage
 
 - Place your sample points in the `src/main/resources/sample-points.txt` file.
-- Run the `ConvexHullDriver.java` to execute the algorithms and visualize the results.
+- Build and run the JavaFX visualization:
+```bash
+# Compile and execute the JavaFX application
+mvn clean compile exec:java -Dexec.mainClass="visualization.ConvexHullApp"
+# Or run the driver class
+mvn clean compile exec:java -Dexec.mainClass="ConvexHullDriver"
+```
 
 ## Testing
 
-Unit tests for the algorithms are located in the `src/test/java` directory. You can run these tests using your preferred testing framework.
+Unit tests for each algorithm live in `src/test/java`. Use the following commands:
+```bash
+# Run all tests
+mvn test
+
+# Run individual test classes
+mvn test -Dtest=GrahamScanTest
+mvn test -Dtest=ChanAlgorithmTest
+mvn test -Dtest=JarvisMarchTest
+mvn test -Dtest=MergeHullTest
+```  
 
 ## License
 

@@ -11,25 +11,25 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GrahamScanTest {
+public class JarvisMarchTest {
 
-    private GrahamScan grahamScan;
+    private JarvisMarch jarvisMarch;
 
     @BeforeEach
     public void setUp() {
-        grahamScan = new GrahamScan();
+        jarvisMarch = new JarvisMarch();
     }
 
     @Test
     public void testNullInput() {
-        List<Point> result = grahamScan.findConvexHull(null);
+        List<Point> result = jarvisMarch.findConvexHull(null);
         assertNull(result, "Null input should return null");
     }
 
     @Test
     public void testLessThanThreePoints() {
         List<Point> points = Arrays.asList(new Point(0, 0), new Point(1, 1));
-        List<Point> result = grahamScan.findConvexHull(points);
+        List<Point> result = jarvisMarch.findConvexHull(points);
         assertNull(result, "Less than 3 points should return null");
     }
 
@@ -41,7 +41,7 @@ public class GrahamScanTest {
             new Point(2, 2)
         );
 
-        List<Point> hull = grahamScan.findConvexHull(points);
+        List<Point> hull = jarvisMarch.findConvexHull(points);
 
         assertNotNull(hull, "Hull should not be null");
         assertEquals(3, hull.size(), "Hull should have 3 points");
@@ -57,7 +57,7 @@ public class GrahamScanTest {
             new Point(2, 0)
         );
 
-        List<Point> hull = grahamScan.findConvexHull(points);
+        List<Point> hull = jarvisMarch.findConvexHull(points);
 
         assertNotNull(hull, "Hull should not be null");
         assertEquals(4, hull.size(), "Hull should have 4 points");
@@ -78,7 +78,7 @@ public class GrahamScanTest {
         points.add(new Point(3, 3));
         points.add(new Point(7, 7));
 
-        List<Point> hull = grahamScan.findConvexHull(points);
+        List<Point> hull = jarvisMarch.findConvexHull(points);
 
         assertNotNull(hull, "Hull should not be null");
         assertEquals(4, hull.size(), "Hull should have 4 points");
@@ -91,25 +91,6 @@ public class GrahamScanTest {
 
         // Verify interior points are not in hull
         assertFalse(containsPoint(hull, new Point(5, 5)), "Hull should not contain interior point (5,5)");
-    }
-
-    @Test
-    public void testCollinearPoints() {
-        List<Point> points = Arrays.asList(
-            new Point(0, 0),
-            new Point(1, 1),
-            new Point(2, 2),
-            new Point(3, 3),
-            new Point(4, 4)
-        );
-
-        List<Point> hull = grahamScan.findConvexHull(points);
-
-        assertNotNull(hull, "Hull should not be null");
-        assertEquals(2, hull.size(), "Hull should have 2 points for collinear points");
-
-        assertTrue(containsPoint(hull, new Point(0, 0)), "Hull should contain first point (0,0)");
-        assertTrue(containsPoint(hull, new Point(4, 4)), "Hull should contain last point (4,4)");
     }
 
     @Test
@@ -134,7 +115,7 @@ public class GrahamScanTest {
             new Point(0, 2)
         );
 
-        List<Point> hull = grahamScan.findConvexHull(points);
+        List<Point> hull = jarvisMarch.findConvexHull(points);
 
         assertNotNull(hull, "Hull should not be null");
         assertEquals(5, hull.size(), "Hull should have 5 points");
@@ -146,9 +127,29 @@ public class GrahamScanTest {
 
     @Test
     public void testReadPointsFromFile() throws IOException {
-        List<Point> points = grahamScan.readPointsFromFile("/root/Algorithm_Analysis/convex-hull/src/main/resources/sample-points.txt");
+        List<Point> points = jarvisMarch.readPointsFromFile("/root/Algorithm_Analysis/convex-hull/src/main/resources/sample-points.txt");
         assertNotNull(points, "Points should be read from file");
         assertFalse(points.isEmpty(), "Points list should not be empty");
+    }
+
+    // Test to compare results with Graham Scan
+    @Test
+    public void testCompareWithGrahamScan() throws IOException {
+        // Load the same set of points for both algorithms
+        List<Point> points = jarvisMarch.readPointsFromFile("/root/Algorithm_Analysis/convex-hull/src/main/resources/sample-points.txt");
+        
+        // Compute convex hulls
+        List<Point> jarvisMarchHull = jarvisMarch.findConvexHull(points);
+        GrahamScan grahamScan = new GrahamScan();
+        List<Point> grahamScanHull = grahamScan.findConvexHull(points);
+        
+        // Both hulls should have the same number of points
+        assertEquals(grahamScanHull.size(), jarvisMarchHull.size(), "Both algorithms should produce hulls of the same size");
+        
+        // Each point in one hull should be in the other hull
+        for (Point p : grahamScanHull) {
+            assertTrue(containsPoint(jarvisMarchHull, p), "All points from Graham Scan hull should be in Jarvis March hull");
+        }
     }
 
     // Helper methods

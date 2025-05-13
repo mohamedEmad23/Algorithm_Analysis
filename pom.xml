@@ -59,7 +59,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>visualization.ConvexHullApp</mainClass>
+                    <mainClass>ConvexHullDriver</mainClass>
                 </configuration>
                 <executions>
                     <execution>

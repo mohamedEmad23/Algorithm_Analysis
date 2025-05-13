@@ -61,3 +61,7 @@ $RECYCLE.BIN/
 # Linux
 *~
 .directory
+
+# Additional Files
+MergeHull.java
+MergeHullTest.java

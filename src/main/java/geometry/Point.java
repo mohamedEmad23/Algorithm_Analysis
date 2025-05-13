@@ -1,6 +1,6 @@
 package geometry;
 
-public class Point{
+public class Point implements Comparable<Point> {
     private double x;
     private double y;
 
@@ -55,4 +55,18 @@ public class Point{
         return "Point [x=" + x + ", y=" + y + "]";
     }
     
+    // Add Comparable implementation for sorting points
+    public int compareTo(Point other) {
+        if (this.x != other.x) {
+            return Double.compare(this.x, other.x);
+        }
+        return Double.compare(this.y, other.y);
+    }
+    
+    // Method to calculate distance squared between two points
+    public double distanceSquared(Point other) {
+        double dx = this.x - other.x;
+        double dy = this.y - other.y;
+        return dx * dx + dy * dy;
+    }
 }
